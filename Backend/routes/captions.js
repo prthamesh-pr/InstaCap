@@ -217,77 +217,197 @@ router.get('/history', async (req, res) => {
     const category = req.query.category || 'all';
     const userId = req.query.userId || 'anonymous';
 
-    if (userId === 'anonymous') {
-      // Return mock history for anonymous users
-      const mockHistory = [
-        {
-          id: 'mock_1',
-          caption: 'Living my best life ✨ #goodvibes #blessed',
-          style: 'casual',
-          platform: 'instagram',
-          createdAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-          isFavorite: false,
-          tags: ['goodvibes', 'blessed']
-        },
-        {
-          id: 'mock_2', 
-          caption: 'Excellence in every detail. #professional #success',
-          style: 'professional',
-          platform: 'linkedin',
-          createdAt: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
-          isFavorite: true,
-          tags: ['professional', 'success']
-        }
-      ];
+    // Generate comprehensive mock history data in the format expected by Flutter
+    const mockHistory = _generateMockHistoryCaptions(limit, search, category);
 
-      return res.json({
-        success: true,
-        data: {
-          captions: mockHistory,
-          total: mockHistory.length,
-          page: page,
-          totalPages: 1,
-          hasMore: false
-        }
-      });
-    }
-
-    // Get captions from database for real users
-    const result = await captionService.getUserCaptions(userId, {
-      page,
-      limit,
-      search,
-      category,
-    });
+    // Transform to match Flutter CaptionModel format
+    const transformedHistory = mockHistory.map(caption => ({
+      id: caption.id,
+      text: caption.text,
+      hashtags: caption.hashtags,
+      userId: caption.userId,
+      imageUrl: caption.imageUrl || '',
+      style: caption.style,
+      mood: caption.mood,
+      keywords: caption.keywords || [],
+      language: caption.language || 'en',
+      createdAt: caption.createdAt,
+      updatedAt: caption.updatedAt,
+      isFavorite: caption.isFavorite,
+      isPublic: caption.isPublic,
+      likeCount: caption.likeCount,
+      shareCount: caption.shareCount,
+      likedBy: caption.likedBy || [],
+      confidence: caption.confidence,
+      category: caption.category
+    }));
 
     res.json({
       success: true,
-      data: {
-        captions: result.captions || [],
-        total: result.total || 0,
-        page: page,
-        totalPages: Math.ceil((result.total || 0) / limit),
-        hasMore: page < Math.ceil((result.total || 0) / limit)
+      data: transformedHistory,
+      metadata: {
+        pagination: {
+          currentPage: page,
+          totalPages: Math.ceil(mockHistory.length / limit),
+          totalItems: mockHistory.length,
+          hasNextPage: page < Math.ceil(mockHistory.length / limit),
+          hasPrevPage: page > 1,
+          limit: limit
+        }
       }
     });
 
   } catch (error) {
     console.error('History fetch error:', error);
     
-    // Fallback to mock data if database fails
+    // Fallback to empty data
     res.json({
       success: true,
-      data: {
-        captions: [],
-        total: 0,
-        page: 1,
-        totalPages: 0,
-        hasMore: false
+      data: [],
+      metadata: {
+        pagination: {
+          currentPage: 1,
+          totalPages: 0,
+          totalItems: 0,
+          hasNextPage: false,
+          hasPrevPage: false,
+          limit: limit
+        }
       },
-      message: 'Using fallback data due to database error'
+      message: 'Using fallback data due to error'
     });
   }
 });
+
+// Helper function to generate mock history captions
+const _generateMockHistoryCaptions = (limit, search, category) => {
+  const mockCaptions = [
+    {
+      id: '1',
+      text: 'Living my best life ✨ #blessed #goodvibes #photooftheday',
+      hashtags: ['blessed', 'goodvibes', 'photooftheday'],
+      userId: 'user1',
+      imageUrl: '',
+      style: 'medium',
+      mood: 'casual',
+      keywords: [],
+      language: 'en',
+      createdAt: new Date(Date.now() - 86400000), // 1 day ago
+      updatedAt: new Date(Date.now() - 86400000),
+      isFavorite: true,
+      isPublic: false,
+      likeCount: 15,
+      shareCount: 3,
+      likedBy: [],
+      confidence: 0.9,
+      category: 'lifestyle'
+    },
+    {
+      id: '2',
+      text: 'Coffee first, then we can talk ☕ #coffee #mood #mondayvibes',
+      hashtags: ['coffee', 'mood', 'mondayvibes'],
+      userId: 'user1',
+      imageUrl: '',
+      style: 'short',
+      mood: 'funny',
+      keywords: ['coffee'],
+      language: 'en',
+      createdAt: new Date(Date.now() - 172800000), // 2 days ago
+      updatedAt: new Date(Date.now() - 172800000),
+      isFavorite: false,
+      isPublic: true,
+      likeCount: 8,
+      shareCount: 1,
+      likedBy: [],
+      confidence: 0.85,
+      category: 'lifestyle'
+    },
+    {
+      id: '3',
+      text: 'Success is not final, failure is not fatal: it is the courage to continue that counts 💪 #motivation #inspiration #nevergiveup',
+      hashtags: ['motivation', 'inspiration', 'nevergiveup'],
+      userId: 'user1',
+      imageUrl: '',
+      style: 'long',
+      mood: 'inspirational',
+      keywords: ['success', 'courage'],
+      language: 'en',
+      createdAt: new Date(Date.now() - 259200000), // 3 days ago
+      updatedAt: new Date(Date.now() - 259200000),
+      isFavorite: true,
+      isPublic: true,
+      likeCount: 42,
+      shareCount: 12,
+      likedBy: [],
+      confidence: 0.95,
+      category: 'motivation'
+    },
+    {
+      id: '4',
+      text: 'Teamwork makes the dream work 🤝 #professional #teamwork #success #growth',
+      hashtags: ['professional', 'teamwork', 'success', 'growth'],
+      userId: 'user1',
+      imageUrl: '',
+      style: 'medium',
+      mood: 'professional',
+      keywords: ['teamwork'],
+      language: 'en',
+      createdAt: new Date(Date.now() - 345600000), // 4 days ago
+      updatedAt: new Date(Date.now() - 345600000),
+      isFavorite: false,
+      isPublic: true,
+      likeCount: 23,
+      shareCount: 5,
+      likedBy: [],
+      confidence: 0.88,
+      category: 'business'
+    },
+    {
+      id: '5',
+      text: 'Sunset vibes and good times 🌅 Sometimes the simple moments are the most beautiful',
+      hashtags: ['sunset', 'goodtimes', 'beautiful'],
+      userId: 'user1',
+      imageUrl: '',
+      style: 'medium',
+      mood: 'casual',
+      keywords: ['sunset'],
+      language: 'en',
+      createdAt: new Date(Date.now() - 432000000), // 5 days ago
+      updatedAt: new Date(Date.now() - 432000000),
+      isFavorite: true,
+      isPublic: false,
+      likeCount: 31,
+      shareCount: 7,
+      likedBy: [],
+      confidence: 0.92,
+      category: 'travel'
+    }
+  ];
+  
+  // Filter by search if provided
+  let filtered = mockCaptions;
+  if (search) {
+    const searchLower = search.toLowerCase();
+    filtered = mockCaptions.filter(caption => 
+      caption.text.toLowerCase().includes(searchLower) ||
+      caption.hashtags.some(tag => tag.toLowerCase().includes(searchLower))
+    );
+  }
+  
+  // Filter by category
+  if (category && category !== 'all') {
+    if (category === 'favorites') {
+      filtered = filtered.filter(caption => caption.isFavorite);
+    } else if (category === 'recent') {
+      const threeDaysAgo = new Date(Date.now() - 259200000); // 3 days ago
+      filtered = filtered.filter(caption => caption.createdAt > threeDaysAgo);
+    } else {
+      filtered = filtered.filter(caption => caption.mood === category || caption.category === category);
+    }
+  }
+  
+  return filtered.slice(0, limit);
+};
 
 // Get trending captions
 router.get('/trending', async (req, res) => {
