@@ -1,0 +1,406 @@
+{
+	"info": {
+		"_postman_id": "8f2e9c6e-2b6c-4c3d-ab17-92b0f3f89c5d",
+		"name": "InstaCap API Collection",
+		"description": "Collection for testing all endpoints of the InstaCap Backend API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Basic Endpoints",
+			"item": [
+				{
+					"name": "Root Endpoint",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://instacap.onrender.com/",
+							"protocol": "https",
+							"host": [
+								"instacap",
+								"onrender",
+								"com"
+							],
+							"path": [
+								""
+							]
+						},
+						"description": "Tests the root endpoint which returns basic API information"
+					},
+					"response": []
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://instacap.onrender.com/health",
+							"protocol": "https",
+							"host": [
+								"instacap",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Checks if the API is healthy and operational"
+					},
+					"response": []
+				},
+				{
+					"name": "Test API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://instacap.onrender.com/api/test",
+							"protocol": "https",
+							"host": [
+								"instacap",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"test"
+							]
+						},
+						"description": "Simple API test endpoint to verify connectivity"
+					},
+					"response": []
+				}
+			],
+			"description": "Basic endpoints that don't require authentication"
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\",\n    \"name\": \"Test User\"\n}"
+						},
+						"url": {
+							"raw": "https://instacap.onrender.com/api/auth/register",
+							"protocol": "https",
+							"host": [
+								"instacap",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"if (jsonData.token) {",
+									"    pm.environment.set(\"authToken\", jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "https://instacap.onrender.com/api/auth/login",
+							"protocol": "https",
+							"host": [
+								"instacap",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login a user and get an authentication token"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://instacap.onrender.com/api/auth/user",
+							"protocol": "https",
+							"host": [
+								"instacap",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"auth",
+								"user"
+							]
+						},
+						"description": "Get the current authenticated user's information"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication-related endpoints for user registration and login"
+		},
+		{
+			"name": "Captions",
+			"item": [
+				{
+					"name": "Generate Caption",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"imageDescription\": \"A beautiful sunset at the beach with palm trees\",\n    \"mood\": \"peaceful\",\n    \"keywords\": [\"sunset\", \"beach\", \"vacation\"],\n    \"captionLength\": \"medium\"\n}"
+						},
+						"url": {
+							"raw": "https://instacap.onrender.com/api/captions/generate",
+							"protocol": "https",
+							"host": [
+								"instacap",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"captions",
+								"generate"
+							]
+						},
+						"description": "Generate a new caption based on image description and preferences"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Captions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://instacap.onrender.com/api/captions",
+							"protocol": "https",
+							"host": [
+								"instacap",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"captions"
+							]
+						},
+						"description": "Get all captions for the current user"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Caption",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://instacap.onrender.com/api/captions/{{captionId}}",
+							"protocol": "https",
+							"host": [
+								"instacap",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"captions",
+								"{{captionId}}"
+							]
+						},
+						"description": "Delete a specific caption by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing captions"
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://instacap.onrender.com/api/users/profile",
+							"protocol": "https",
+							"host": [
+								"instacap",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						},
+						"description": "Get the profile information for the current user"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Name\",\n    \"preferences\": {\n        \"defaultCaptionLength\": \"medium\",\n        \"preferredStyle\": \"casual\"\n    }\n}"
+						},
+						"url": {
+							"raw": "https://instacap.onrender.com/api/users/profile",
+							"protocol": "https",
+							"host": [
+								"instacap",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						},
+						"description": "Update the profile information for the current user"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing user information"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://instacap.onrender.com",
+			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "captionId",
+			"value": "example-caption-id",
+			"type": "string"
+		}
+	]
+}
