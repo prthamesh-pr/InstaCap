@@ -1,304 +1,246 @@
-# AutoText - Smart Social Media Caption Generator
+# InstaCap - AI-Powered Caption Generator 📱✨
 
-A complete Flutter + Node.js application for generating intelligent Instagram captions using AI.
+A beautiful Flutter application that generates AI-powered captions for your social media posts using image analysis.
 
-## 🚀 Features
+## 🌟 Features
 
-### Frontend (Flutter)
-- **Modern UI/UX** with Material 3 design
-- **Firebase Authentication** (Email/Password)
-- **Multi-input Support** (Text prompts & Image analysis)
-- **Customizable Settings** (Tone, Style, Hashtags, Emojis)
-- **Caption History** with local storage
-- **Trending Suggestions** and templates
-- **Dark/Light Theme** support
-- **Responsive Design** for all screen sizes
+- **AI-Powered Caption Generation**: Upload an image and get engaging captions
+- **Beautiful Liquid Glass UI**: Modern glassmorphism design with neon effects
+- **Firebase Authentication**: Secure user authentication with email/password
+- **Caption History**: Save and manage your generated captions
+- **Cross-Platform**: Works on Android, iOS, and Web
+- **Multiple Caption Styles**: Professional, casual, funny, and inspirational tones
+- **Social Media Ready**: Optimized for Instagram, Facebook, Twitter, and more
 
-### Backend (Node.js)
-- **RESTful API** with Express.js
-- **Firebase Admin SDK** for authentication
-- **OpenAI GPT Integration** for caption generation
-- **Image Analysis** using GPT-4 Vision
-- **Rate Limiting** and security middleware
-- **Error Handling** and validation
-- **CORS** enabled for cross-origin requests
+## 🚀 Live Demo
 
-## 📋 Prerequisites
+- **Frontend**: Deployed on Flutter Web
+- **Backend API**: https://instacap.onrender.com
 
-### For Backend:
-- Node.js (v16+)
-- npm or yarn
+## 🛠️ Tech Stack
+
+### Frontend
+- **Flutter 3.32.1** - Cross-platform development
+- **Material Design 3** - Modern UI components
+- **Provider** - State management
+- **Firebase Auth** - User authentication
+- **Google Fonts** - Typography (Plus Jakarta Sans, Inter)
+- **Glassmorphism** - Modern UI effects
+- **Animate Do** - Smooth animations
+
+### Backend
+- **Node.js & Express** - REST API server
+- **OpenAI GPT** - AI caption generation
+- **Firebase Admin** - User verification
+- **Multer** - File upload handling
+- **CORS** - Cross-origin support
+
+## 📱 Screenshots
+
+*Beautiful liquid glass interface with modern design*
+
+## 🏗️ Project Structure
+
+```
+InstaCap/
+├── Frontend/
+│   └── insta_cap/
+│       ├── lib/
+│       │   ├── core/           # App configuration & themes
+│       │   ├── models/         # Data models
+│       │   ├── providers/      # State management
+│       │   ├── services/       # API & authentication services
+│       │   ├── presentation/   # UI screens & widgets
+│       │   └── main.dart       # App entry point
+│       ├── web/               # Web-specific files
+│       └── android/           # Android configuration
+├── Backend/
+│   ├── routes/                # API endpoints
+│   ├── middleware/            # Authentication & error handling
+│   ├── config/                # Firebase & database config
+│   ├── utils/                 # Utility functions
+│   └── server.js             # Express server
+└── docs/                     # Documentation
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Flutter SDK (3.0+)
+- Node.js (16+)
+- Firebase project
 - OpenAI API key
-- Firebase project with Admin SDK
 
-### For Frontend:
-- Flutter SDK (latest stable)
-- Dart SDK
-- Android Studio / Xcode (for mobile)
-- Firebase project configuration
+### Frontend Setup
 
-## 🛠️ Installation & Setup
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/prthamesh-pr/InstaCap.git
+   cd InstaCap/Frontend/insta_cap
+   ```
 
-### 1. Backend Setup
+2. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
 
+3. **Configure Firebase**
+   - Add your Firebase configuration to `lib/firebase_options.dart`
+   - Update `web/index.html` with your Firebase config
+
+4. **Run the app**
+   ```bash
+   flutter run
+   ```
+
+### Backend Setup
+
+1. **Navigate to backend**
+   ```bash
+   cd Backend
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Environment variables**
+   Create `.env` file:
+   ```env
+   NODE_ENV=production
+   PORT=3001
+   OPENAI_API_KEY=your_openai_api_key
+   FIREBASE_PROJECT_ID=your_firebase_project_id
+   FIREBASE_CLIENT_EMAIL=your_firebase_client_email
+   FIREBASE_PRIVATE_KEY=your_firebase_private_key
+   ```
+
+4. **Start the server**
+   ```bash
+   npm start
+   ```
+
+## 🔥 Key Features Implementation
+
+### Liquid Glass UI
+- Custom glass widgets with backdrop filters
+- Neon glow effects and animations
+- Responsive design with ScreenUtil
+- Modern color gradients and shadows
+
+### AI Caption Generation
+- OpenAI GPT integration for smart captions
+- Image analysis for context-aware generation
+- Multiple tone options (professional, casual, funny)
+- Real-time generation with loading states
+
+### Firebase Integration
+- Secure user authentication
+- Cloud Firestore for data storage
+- Firebase Storage for image uploads
+- Admin SDK for backend verification
+
+## 📱 Supported Platforms
+
+- ✅ Android
+- ✅ iOS
+- ✅ Web
+- ✅ Windows (Flutter Desktop)
+- ✅ macOS (Flutter Desktop)
+
+## 🔧 Development
+
+### Running Tests
 ```bash
-# Navigate to backend directory
-cd Backend
-
-# Install dependencies
-npm install
-
-# Create environment file
-cp .env.example .env
-
-# Configure your environment variables in .env:
-# - OPENAI_API_KEY: Your OpenAI API key
-# - FIREBASE_PROJECT_ID: Your Firebase project ID
-# - FIREBASE_CLIENT_EMAIL: Service account email
-# - FIREBASE_PRIVATE_KEY: Service account private key
-```
-
-#### Firebase Admin Setup:
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Create a new project or select existing
-3. Go to Project Settings > Service Accounts
-4. Generate new private key
-5. Add the credentials to your `.env` file
-
-#### OpenAI Setup:
-1. Get API key from [OpenAI Platform](https://platform.openai.com/api-keys)
-2. Add to `.env` file as `OPENAI_API_KEY`
-
-```bash
-# Start the backend server
-npm run dev
-
-# Server will run on http://localhost:3000
-```
-
-### 2. Frontend Setup
-
-```bash
-# Navigate to frontend directory
+# Frontend tests
 cd Frontend/insta_cap
+flutter test
 
-# Get Flutter dependencies
-flutter pub get
-
-# Configure Firebase for Flutter
-# Install FlutterFire CLI
-dart pub global activate flutterfire_cli
-
-# Configure Firebase (follow prompts)
-flutterfire configure
-
-# This will update firebase_options.dart with your project config
-```
-
-#### Manual Firebase Configuration (Alternative):
-If FlutterFire CLI doesn't work, manually update `lib/firebase_options.dart` with your Firebase project credentials.
-
-```bash
-# Run the app
-flutter run
-
-# For web
-flutter run -d chrome
-
-# For specific device
-flutter devices
-flutter run -d <device-id>
-```
-
-### 3. API Configuration
-
-Update the API base URL in `lib/providers/caption_provider.dart`:
-
-```dart
-// For local development
-static const String baseUrl = 'http://localhost:3000/api';
-
-// For production
-static const String baseUrl = 'https://your-api-domain.com/api';
-```
-
-## 🔧 Configuration
-
-### Backend Environment Variables
-
-```env
-# Server Configuration
-NODE_ENV=development
-PORT=3000
-
-# OpenAI Configuration
-OPENAI_API_KEY=your_openai_api_key_here
-
-# Firebase Configuration
-FIREBASE_PROJECT_ID=your_firebase_project_id
-FIREBASE_CLIENT_EMAIL=your_firebase_client_email
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
-
-# Rate Limiting
-RATE_LIMIT_WINDOW_MS=900000
-RATE_LIMIT_MAX_REQUESTS=100
-
-# File Upload
-MAX_FILE_SIZE=5242880
-ALLOWED_FILE_TYPES=image/jpeg,image/png,image/webp
-```
-
-### Frontend Configuration
-
-Update `lib/providers/caption_provider.dart` for your backend URL:
-
-```dart
-static const String baseUrl = 'http://your-backend-url:3000/api';
-```
-
-## 📱 Usage
-
-### For Users:
-1. **Sign Up/Login** with email and password
-2. **Generate Captions** by:
-   - Entering a text prompt, OR
-   - Uploading an image for analysis
-3. **Customize** tone, style, hashtags, and emojis
-4. **View History** of generated captions
-5. **Browse Trending** ideas and templates
-
-### API Endpoints:
-
-#### Authentication
-- `POST /api/auth/verify` - Verify Firebase token
-- `POST /api/auth/refresh` - Refresh token
-- `POST /api/auth/logout` - Logout user
-
-#### Captions
-- `POST /api/captions/generate` - Generate caption from text
-- `POST /api/captions/analyze-image` - Generate caption from image
-- `GET /api/captions/trending` - Get trending suggestions
-- `GET /api/captions/templates` - Get caption templates
-
-#### Users
-- `GET /api/users/profile` - Get user profile
-- `PUT /api/users/profile` - Update user profile
-- `GET /api/users/stats` - Get user statistics
-
-## 🚀 Deployment
-
-### Backend Deployment (Heroku/Railway/DigitalOcean)
-
-```bash
-# Build for production
-npm install --production
-
-# Set environment variables on your hosting platform
-# Deploy using your platform's CLI or web interface
-```
-
-### Frontend Deployment
-
-#### Web Deployment:
-```bash
-# Build for web
-flutter build web
-
-# Deploy the build/web folder to your hosting service
-# (Netlify, Vercel, Firebase Hosting, etc.)
-```
-
-#### Mobile App:
-```bash
-# Android
-flutter build apk --release
-flutter build appbundle --release
-
-# iOS
-flutter build ios --release
-```
-
-## 🔒 Security Features
-
-- **Firebase Authentication** with secure token validation
-- **Rate Limiting** to prevent API abuse
-- **CORS** configuration for secure cross-origin requests
-- **Input Validation** and sanitization
-- **Error Handling** without exposing sensitive information
-- **Helmet.js** for security headers
-
-## 🧪 Testing
-
-### Backend Testing:
-```bash
+# Backend tests
 cd Backend
 npm test
 ```
 
-### Frontend Testing:
+### Building for Production
 ```bash
-cd Frontend/insta_cap
-flutter test
+# Android APK
+flutter build apk --release
+
+# iOS IPA
+flutter build ipa --release
+
+# Web
+flutter build web --release
 ```
 
-## 📊 Monitoring & Analytics
+## 🌐 API Endpoints
 
-The app includes:
-- **Error Logging** for debugging
-- **Request Logging** with Morgan
-- **Performance Monitoring** ready
-- **User Analytics** hooks (implement as needed)
+### Authentication
+- `POST /api/auth/verify` - Verify Firebase token
+
+### Caption Generation
+- `POST /api/captions/analyze-image` - Generate caption from image
+- `GET /api/captions/history` - Get user's caption history
+- `POST /api/captions/save` - Save a caption
+- `DELETE /api/captions/:id` - Delete a caption
+
+### User Management
+- `GET /api/users/profile` - Get user profile
+- `PUT /api/users/profile` - Update user profile
+- `GET /api/users/stats` - Get user statistics
+
+## 🎨 Design System
+
+### Colors
+- **Primary**: Purple gradient (#6C63FF → #8B84FF)
+- **Secondary**: Coral (#FF6B6B → #FF8A8A)
+- **Accent**: Cyan (#4ECDC4 → #6EDDDD)
+- **Glass Effects**: Semi-transparent whites and blacks
+
+### Typography
+- **Headers**: Plus Jakarta Sans (Bold)
+- **Body**: Inter (Regular/Medium)
+- **Responsive**: ScreenUtil for adaptive sizing
+
+## 🚀 Deployment
+
+### Frontend (Web)
+1. Build the web version:
+   ```bash
+   flutter build web --release
+   ```
+2. Deploy to Firebase Hosting, Netlify, or Vercel
+
+### Backend (API)
+1. Deploy to Render, Heroku, or DigitalOcean
+2. Set environment variables
+3. Update frontend API URL
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Troubleshooting
+## 👨‍💻 Author
 
-### Common Issues:
+**Prthamesh**
+- GitHub: [@prthamesh-pr](https://github.com/prthamesh-pr)
 
-#### Backend Issues:
-- **Port already in use**: Change PORT in .env or kill the process
-- **Firebase errors**: Verify service account credentials
-- **OpenAI errors**: Check API key and quota
+## 🙏 Acknowledgments
 
-#### Frontend Issues:
-- **Firebase not configured**: Run `flutterfire configure`
-- **Dependencies issues**: Run `flutter clean && flutter pub get`
-- **Network errors**: Check backend URL and CORS settings
-
-### Getting Help:
-- Check the GitHub issues for common problems
-- Verify all environment variables are set correctly
-- Ensure Firebase and OpenAI accounts are properly configured
-
-## 📈 Roadmap
-
-- [ ] **Social Media Integration** (Instagram, Twitter, Facebook)
-- [ ] **Batch Caption Generation**
-- [ ] **Caption Scheduling**
-- [ ] **Analytics Dashboard**
-- [ ] **Team Collaboration Features**
-- [ ] **Multi-language Support**
-- [ ] **Voice Input**
-- [ ] **Caption Performance Tracking**
+- OpenAI for GPT API
+- Firebase for authentication and hosting
+- Flutter team for the amazing framework
+- Material Design for UI guidelines
 
 ---
 
-## 💡 Tips for Success
-
-1. **Start with the backend** - get the API working first
-2. **Test authentication** thoroughly before adding features
-3. **Use environment variables** for all sensitive data
-4. **Monitor API usage** to stay within OpenAI limits
-5. **Implement proper error handling** for better UX
-
-Happy coding! 🎉
+Made with ❤️ using Flutter & Node.js

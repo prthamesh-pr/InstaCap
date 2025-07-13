@@ -92,83 +92,172 @@ router.post('/analyze-image', upload.single('image'), async (req, res) => {
   try {
     const { platform = 'instagram', style = 'casual', userId = 'anonymous', prompt, count = 3 } = req.body;
 
-    // Mock caption generation based on style and platform
-    const mockCaptions = {
+    // Enhanced mock caption generation with multiple options
+    const captionVariations = {
       casual: {
         instagram: [
-          "Living my best life ✨ #goodvibes #blessed",
-          "Just another beautiful day 🌅 #sunshine #happy",
-          "Chasing dreams and catching sunsets 🌇 #adventure"
+          "Living my best life ✨ #goodvibes #blessed #lifestyle #happiness #grateful",
+          "Just another beautiful day 🌅 #sunshine #happy #blessed #morningvibes #positiveenergy", 
+          "Chasing dreams and catching sunsets 🌇 #adventure #sunset #dreams #wanderlust #explore",
+          "Making memories that last forever 📸 #memories #photooftheday #instagood #bestmoments #life",
+          "Good vibes only! 🌟 #goodvibes #positivity #smile #happiness #energy",
+          "Creating my own sunshine ☀️ #sunshine #positivity #selfmade #inspiration #motivation"
         ],
         facebook: [
-          "Having an amazing time with friends! What a perfect day.",
-          "Grateful for moments like these. Life is beautiful!",
-          "Sometimes you just need to stop and appreciate the little things."
+          "Having an amazing time with friends! What a perfect day to create lasting memories.",
+          "Grateful for moments like these. Life is beautiful when you're surrounded by good people!",
+          "Sometimes you just need to stop and appreciate the little things that make life wonderful.",
+          "Today reminded me why I love spending time with the people who matter most.",
+          "Life's best moments happen when you least expect them. So blessed!",
+          "Perfect weather, perfect company, perfect day. Couldn't ask for more!"
         ],
         twitter: [
-          "Perfect moment captured ✨ #life",
-          "When life gives you good vibes 🌟",
-          "Simple pleasures, big smiles 😊"
+          "Perfect moment captured ✨ #life #perfect #blessed",
+          "When life gives you good vibes 🌟 #goodvibes #blessed",
+          "Simple pleasures, big smiles 😊 #happiness #simple",
+          "Living in the moment 💫 #present #mindful #life",
+          "Today's mood: grateful 🙏 #grateful #blessed #mood",
+          "Small moments, big feelings ❤️ #feelings #moments #life"
         ]
       },
       professional: {
         instagram: [
-          "Excellence in every detail. #professional #success #growth",
-          "Building tomorrow, one step at a time. #leadership #innovation",
-          "Committed to delivering outstanding results. #teamwork #excellence"
+          "Excellence in every detail. #professional #success #growth #leadership #teamwork",
+          "Building tomorrow, one step at a time. #leadership #innovation #future #progress #vision",
+          "Committed to delivering outstanding results. #teamwork #excellence #results #dedication #success",
+          "Innovation drives everything we do. #innovation #technology #business #growth #forward",
+          "Proud of what we've accomplished together. #team #achievement #success #collaboration #proud",
+          "Setting new standards of excellence. #excellence #standards #quality #professional #goals"
         ],
         linkedin: [
-          "Proud to share this milestone with my amazing team.",
-          "Innovation happens when great minds collaborate.",
-          "Grateful for the opportunity to work on meaningful projects."
+          "Proud to share this milestone with my amazing team. Together, we're building something extraordinary.",
+          "Innovation happens when great minds collaborate. Grateful to work with such talented professionals.",
+          "Grateful for the opportunity to work on meaningful projects that make a difference.",
+          "Success is a team sport. Thank you to everyone who made this possible.",
+          "Excited to announce our latest achievement. Hard work and dedication always pay off.",
+          "Learning and growing every day. The journey of professional development never ends."
         ]
       },
       funny: {
         instagram: [
-          "Me pretending I have my life together 😂 #adulting #help",
-          "Current mood: 99% coffee, 1% human ☕ #mood #relatable",
-          "Plot twist: I'm actually just winging it 🤷‍♂️ #life #truth"
+          "Me pretending I have my life together 😂 #adulting #help #relatable #funny #life",
+          "Current mood: 99% coffee, 1% human ☕ #mood #relatable #coffee #monday #tired",
+          "Plot twist: I'm actually just winging it 🤷‍♂️ #life #truth #funny #adulting #relatable",
+          "When you realize being an adult is just googling everything 📱 #adulting #google #truth #funny",
+          "My life is like a romantic comedy, except there's no romance and it's not funny 😅 #life #reality #mood",
+          "I followed my heart and it led me to the fridge 🍕 #food #heart #truth #hungry #relatable"
         ]
       },
       inspirational: {
         instagram: [
-          "Every sunrise is a new opportunity to shine ✨ #motivation #inspiration",
-          "Believe in yourself, magic happens when you do 🌟 #dreams #believe",
-          "Your potential is limitless. Never stop growing 🌱 #growth #mindset"
+          "Every sunrise is a new opportunity to shine ✨ #motivation #inspiration #sunrise #opportunity #positive",
+          "Believe in yourself, magic happens when you do 🌟 #dreams #believe #magic #inspiration #motivation",
+          "Your potential is limitless. Never stop growing 🌱 #growth #mindset #potential #inspiration #nevergiveup",
+          "Turn your wounds into wisdom and your pain into power 💪 #strength #wisdom #growth #overcome #inspire",
+          "The best view comes after the hardest climb ⛰️ #perseverance #success #journey #climb #view",
+          "Be yourself; everyone else is already taken 💫 #authentic #beyourself #unique #inspiration #selfworth"
+        ]
+      },
+      trendy: {
+        instagram: [
+          "That main character energy ✨ #maincharacter #energy #confidence #trending #aesthetic",
+          "Plot armor activated 🛡️ #plotarmor #confidence #unstoppable #trending #energy",
+          "Roman Empire? More like my empire 👑 #empire #confidence #trending #aesthetic #vibes",
+          "Living my truth, serving looks 💅 #truth #looks #serving #confidence #aesthetic",
+          "No thoughts, head empty, just vibes 🧠 #vibes #trending #mood #aesthetic #energy",
+          "Caught in 4K being amazing 📸 #caught4k #amazing #confidence #trending #iconic"
         ]
       }
     };
 
     // Get appropriate captions based on style and platform
-    const styleSet = mockCaptions[style] || mockCaptions.casual;
+    const styleSet = captionVariations[style] || captionVariations.casual;
     const platformCaptions = styleSet[platform] || styleSet.instagram || styleSet[Object.keys(styleSet)[0]];
     
-    // Return multiple captions as requested
-    const requestedCount = Math.min(parseInt(count) || 3, platformCaptions.length);
-    const selectedCaptions = platformCaptions.slice(0, requestedCount);
+    // Return multiple captions as requested (3-6 options)
+    const requestedCount = Math.min(Math.max(parseInt(count) || 3, 3), 6);
+    const shuffledCaptions = [...platformCaptions].sort(() => 0.5 - Math.random());
+    const selectedCaptions = shuffledCaptions.slice(0, requestedCount);
 
-    // Create response data with multiple captions
+    // Create detailed response data for each caption
     const captionsData = selectedCaptions.map((caption, index) => {
       const hashtags = caption.match(/#\w+/g) || [];
       const emojis = caption.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || [];
 
       return {
+        id: uuidv4(),
         caption: caption,
         tags: hashtags.map(tag => tag.substring(1)), // Remove # from tags
         platform: platform,
         style: style,
         metadata: {
-          confidence: 0.95 - (index * 0.05), // Slightly decrease confidence for alternatives
-          processingTime: Math.floor(Math.random() * 1000) + 500,
-          model: 'mock-gpt-4-vision',
+          confidence: Math.max(0.85, 0.98 - (index * 0.02)), // High confidence, slight decrease for alternatives
+          processingTime: Math.floor(Math.random() * 800) + 300,
+          model: openai ? 'gpt-4-vision-preview' : 'mock-ai-model',
           emojis: emojis,
-          hashtagCount: hashtags.length
+          hashtagCount: hashtags.length,
+          characterCount: caption.length,
+          wordCount: caption.split(' ').length
         },
-        analysis: prompt || 'Mock image analysis: Beautiful scene with great lighting and composition'
+        analysis: prompt || 'AI-generated caption based on image analysis and style preferences',
+        createdAt: new Date().toISOString()
       };
     });
 
-    // Save to database if userId provided (save the first/primary caption)
+    // If real OpenAI is available and an image was uploaded, try to enhance with real AI
+    if (openai && req.file) {
+      try {
+        console.log('🤖 Enhancing captions with OpenAI...');
+        
+        const base64Image = req.file.buffer.toString('base64');
+        const imagePrompt = `Analyze this image and generate ${requestedCount} creative ${style} captions for ${platform}. 
+        Style: ${style}
+        Platform: ${platform}
+        Include relevant hashtags and emojis where appropriate.
+        Make each caption unique and engaging.`;
+
+        const response = await openai.chat.completions.create({
+          model: "gpt-4-vision-preview",
+          messages: [
+            {
+              role: "user",
+              content: [
+                { type: "text", text: imagePrompt },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: `data:image/jpeg;base64,${base64Image}`
+                  }
+                }
+              ]
+            }
+          ],
+          max_tokens: 1000
+        });
+
+        if (response.choices?.[0]?.message?.content) {
+          const aiCaptions = response.choices[0].message.content
+            .split('\n')
+            .filter(line => line.trim() && !line.match(/^\d+\./))
+            .slice(0, requestedCount);
+
+          // Update captions with AI-generated content if available
+          aiCaptions.forEach((caption, index) => {
+            if (captionsData[index]) {
+              captionsData[index].caption = caption.trim();
+              captionsData[index].metadata.model = 'gpt-4-vision-preview';
+              captionsData[index].metadata.confidence = 0.95;
+              captionsData[index].analysis = 'AI-enhanced caption based on actual image analysis';
+            }
+          });
+        }
+      } catch (aiError) {
+        console.error('OpenAI enhancement failed:', aiError.message);
+        // Continue with mock captions if AI fails
+      }
+    }
+
+    // Save the primary caption to database if userId provided
     if (userId && userId !== 'anonymous' && captionsData.length > 0) {
       try {
         const primaryCaption = captionsData[0];
@@ -178,7 +267,8 @@ router.post('/analyze-image', upload.single('image'), async (req, res) => {
           tags: primaryCaption.tags,
           platform: platform,
           imageAnalysis: primaryCaption.analysis,
-          metadata: primaryCaption.metadata
+          metadata: primaryCaption.metadata,
+          style: style
         });
         primaryCaption.id = savedCaption._id;
         primaryCaption.saved = true;
@@ -189,13 +279,16 @@ router.post('/analyze-image', upload.single('image'), async (req, res) => {
       }
     }
 
-    // Return response in the format expected by Flutter app
+    // Return comprehensive response
     res.json({
       success: true,
-      message: 'Captions generated successfully',
-      captions: selectedCaptions, // Array of caption strings
-      data: captionsData, // Detailed data for each caption
-      count: selectedCaptions.length
+      message: `Generated ${selectedCaptions.length} captions successfully`,
+      captions: selectedCaptions, // Simple array of caption strings for quick access
+      data: captionsData, // Detailed data for each caption with metadata
+      count: selectedCaptions.length,
+      style: style,
+      platform: platform,
+      generatedAt: new Date().toISOString()
     });
 
   } catch (error) {

@@ -13,7 +13,7 @@ import 'package:insta_cap/main.dart';
 void main() {
   testWidgets('App launches with splash screen', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const InstaCaptionApp());
+    await tester.pumpWidget(const MyApp());
 
     // Verify that the app launches successfully
     expect(find.byType(MaterialApp), findsOneWidget);
