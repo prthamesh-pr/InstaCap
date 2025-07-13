@@ -82,6 +82,9 @@ wheels/
 .installed.cfg
 *.egg
 
+# Flutter lib directory should be tracked
+!Frontend/insta_cap/lib/
+
 # Firebase
 **/firebase-debug.log
 **/firebase-debug.*.log
