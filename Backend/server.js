@@ -22,7 +22,12 @@ app.use(limiter);
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'http://localhost:8080'],
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || [
+    'http://localhost:3000', 
+    'http://localhost:8080',
+    'http://localhost:57707',  // Flutter web dev server
+    /^http:\/\/localhost:\d+$/  // Allow any localhost port
+  ],
   credentials: true
 }));
 
